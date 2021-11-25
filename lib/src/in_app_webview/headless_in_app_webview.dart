@@ -60,6 +60,7 @@ class HeadlessInAppWebView implements WebView {
       this.onLoadHttpError,
       this.onProgressChanged,
       this.onConsoleMessage,
+      this.onReceiveMessage,
       this.shouldOverrideUrlLoading,
       this.onLoadResource,
       this.onScrollChanged,
@@ -212,6 +213,7 @@ class HeadlessInAppWebView implements WebView {
   @override
   final String? initialFile;
 
+
   @override
   final InAppWebViewGroupOptions? initialOptions;
 
@@ -284,6 +286,9 @@ class HeadlessInAppWebView implements WebView {
   void Function(
           InAppWebViewController controller, ConsoleMessage consoleMessage)?
       onConsoleMessage;
+
+  @override
+  void Function(InAppWebViewController controller, dynamic message)? onReceiveMessage;
 
   @override
   Future<bool?> Function(InAppWebViewController controller,

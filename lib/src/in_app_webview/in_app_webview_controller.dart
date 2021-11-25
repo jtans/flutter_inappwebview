@@ -190,6 +190,15 @@ class InAppWebViewController {
             _inAppBrowser!.onConsoleMessage(consoleMessage);
         }
         break;
+      case "onReceiveMessage":
+        if ((_webview != null && _webview!.onReceiveMessage != null) ||
+            _inAppBrowser != null) {
+          if (_webview != null && _webview!.onReceiveMessage != null)
+            _webview!.onReceiveMessage!(this, call.arguments);
+          else
+            _inAppBrowser!.onReceiveMessage(call.arguments);
+        }
+        break;
       case "onScrollChanged":
         if ((_webview != null && _webview!.onScrollChanged != null) ||
             _inAppBrowser != null) {

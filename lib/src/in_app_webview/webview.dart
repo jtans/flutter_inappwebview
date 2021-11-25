@@ -71,6 +71,11 @@ abstract class WebView {
           InAppWebViewController controller, ConsoleMessage consoleMessage)?
       onConsoleMessage;
 
+  ///iOS WKWebViewDelegate callback func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage)
+  final void Function(
+          InAppWebViewController controller, dynamic message)?
+      onReceiveMessage;
+
   ///Give the host application a chance to take control when a URL is about to be loaded in the current WebView. This event is not called on the initial load of the WebView.
   ///
   ///Note that on Android there isn't any way to load an URL for a frame that is not the main frame, so if the request is not for the main frame, the navigation is allowed by default.
@@ -683,6 +688,7 @@ abstract class WebView {
       this.onLoadHttpError,
       this.onProgressChanged,
       this.onConsoleMessage,
+      this.onReceiveMessage,
       this.shouldOverrideUrlLoading,
       this.onLoadResource,
       this.onScrollChanged,

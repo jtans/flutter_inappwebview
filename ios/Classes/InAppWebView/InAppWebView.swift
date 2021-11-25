@@ -471,6 +471,10 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
         configuration.userContentController.add(self, name: "onWebMessagePortMessageReceived")
         configuration.userContentController.removeScriptMessageHandler(forName: "onWebMessageListenerPostMessageReceived")
         configuration.userContentController.add(self, name: "onWebMessageListenerPostMessageReceived")
+        //TODO 暂时这么整，貌似没发现有对应接口支持？后面有时间在整理动态注册name
+        configuration.userContentController.removeScriptMessageHandler(forName: "WoLeXueCallNative")
+        configuration.userContentController.add(self, name: "WoLeXueCallNative")
+        
         configuration.userContentController.addUserOnlyScripts(initialUserScripts)
         configuration.userContentController.sync(scriptMessageHandler: self)
     }
@@ -2648,6 +2652,8 @@ if(window.\(JAVASCRIPT_BRIDGE_NAME)[\(_callHandlerID)] != null) {
                 }
                 webMessageListener.onPostMessage(message: messageData, sourceOrigin: sourceOrigin, isMainFrame: isMainFrame)
             }
+        } else if(message.name == "WoLeXueCallNative")  {
+            channel?.invokeMethod("onReceiveMessage", arguments: ["name": message.name, "body": message.body])
         }
     }
     
