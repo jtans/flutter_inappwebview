@@ -1,5 +1,7 @@
 package com.pichillilorenzo.flutter_inappwebview;
 
+import static com.pichillilorenzo.flutter_inappwebview.plugin_scripts_js.JavaScriptBridgeJS.JAVASCRIPT_BRIDGE_NAME;
+
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -99,6 +101,7 @@ public class JavaScriptBridgeInterface {
           return;
         }
 
+
         // invoke flutter javascript handler and send back flutter data as a JSON Object to javascript
         channel.invokeMethod("onCallJsHandler", obj, new MethodChannel.Result() {
           @Override
@@ -108,10 +111,10 @@ public class JavaScriptBridgeInterface {
               return;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-              inAppWebView.evaluateJavascript("if(window." + JavaScriptBridgeJS.JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "] != null) {window." + JavaScriptBridgeJS.JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "](" + json + "); delete window." + JavaScriptBridgeJS.JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "];}", (ValueCallback<String>) null);
+              inAppWebView.evaluateJavascript("if(window." + JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "] != null) {window." + JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "](" + json + "); delete window." + JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "];}", (ValueCallback<String>) null);
             }
             else {
-              inAppWebView.loadUrl("javascript:if(window." + JavaScriptBridgeJS.JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "] != null) {window." + JavaScriptBridgeJS.JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "](" + json + "); delete window." + JavaScriptBridgeJS.JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "];}");
+              inAppWebView.loadUrl("javascript:if(window." + JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "] != null) {window." + JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "](" + json + "); delete window." + JAVASCRIPT_BRIDGE_NAME + "[" + _callHandlerID + "];}");
             }
           }
 
@@ -125,6 +128,31 @@ public class JavaScriptBridgeInterface {
 
           }
         });
+      }
+    });
+  }
+
+  @JavascriptInterface
+  public void postMessage(final String data) {
+    if (inAppWebView == null) {
+      return;
+    }
+
+    final Map<String, Object> obj = new HashMap<>();
+    obj.put("name", JAVASCRIPT_BRIDGE_NAME);
+    obj.put("body", data);
+
+    final Handler handler = new Handler(Looper.getMainLooper());
+    handler.post(new Runnable() {
+      @Override
+      public void run() {
+        if (inAppWebView == null) {
+          // The webview has already been disposed, ignore.
+          return;
+        }
+        channel.invokeMethod("onReceiveMessage", obj);
+
+
       }
     });
   }
