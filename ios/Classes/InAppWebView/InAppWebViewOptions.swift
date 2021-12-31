@@ -14,7 +14,7 @@ public class InAppWebViewOptions: Options<InAppWebView> {
     var useShouldOverrideUrlLoading = false
     var useOnLoadResource = false
     var useOnDownloadStart = false
-    var clearCache = false
+    var iaw_clearCache = false
     var userAgent = ""
     var applicationNameForUserAgent = ""
     var javaScriptEnabled = true

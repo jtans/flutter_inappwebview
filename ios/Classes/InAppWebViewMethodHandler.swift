@@ -246,7 +246,7 @@ public class InAppWebViewMethodHandler: FlutterMethodCallDelegate {
                 }
                 break
             case "clearCache":
-                webView?.clearCache()
+                webView?.iaw_clearCache()
                 result(true)
                 break
             case "scrollTo":
