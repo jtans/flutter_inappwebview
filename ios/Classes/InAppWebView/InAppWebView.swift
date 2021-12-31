@@ -386,8 +386,8 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             // debugging is always enabled for iOS,
             // there isn't any option to set about it such as on Android.
             
-            if options.iaw_clearCache {
-                iaw_clearCache()
+            if options.clsCache {
+                clsCache()
             }
         }
         
@@ -1050,8 +1050,8 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             configuration.preferences.setValue(newOptions.allowFileAccessFromFileURLs, forKey: "allowFileAccessFromFileURLs")
         }
         
-        if newOptionsMap["clearCache"] != nil && newOptions.iaw_clearCache {
-            iaw_clearCache()
+        if newOptionsMap["clearCache"] != nil && newOptions.clsCache {
+            clsCache()
         }
         
         if newOptionsMap["javaScriptEnabled"] != nil && options?.javaScriptEnabled != newOptions.javaScriptEnabled {
@@ -1140,7 +1140,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
         }
     }
     
-    public func iaw_clearCache() {
+    public func clsCache() {
         if #available(iOS 9.0, *) {
             //let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
             let date = NSDate(timeIntervalSince1970: 0)
