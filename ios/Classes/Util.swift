@@ -12,7 +12,7 @@ var SharedLastTouchPointTimestamp: [InAppWebView: Int64] = [:]
 
 public class Util {
     public static func getUrlAsset(assetFilePath: String) throws -> URL {
-        let key = SwiftFlutterPlugin.instance!.registrar!.lookupKey(forAsset: assetFilePath)
+        let key = SwiftFlutterPlugin.instance?.registrar?.lookupKey(forAsset: assetFilePath)
         guard let assetURL = Bundle.main.url(forResource: key, withExtension: nil) else {
             throw NSError(domain: assetFilePath + " asset file cannot be found!", code: 0)
         }
@@ -20,7 +20,7 @@ public class Util {
     }
     
     public static func getAbsPathAsset(assetFilePath: String) throws -> String {
-        let key = SwiftFlutterPlugin.instance!.registrar!.lookupKey(forAsset: assetFilePath)
+        let key = SwiftFlutterPlugin.instance?.registrar?.lookupKey(forAsset: assetFilePath)
         guard let assetAbsPath = Bundle.main.path(forResource: key, ofType: nil) else {
             throw NSError(domain: assetFilePath + " asset file cannot be found!", code: 0)
         }
@@ -213,7 +213,7 @@ public class Util {
             } else {
                 // normalize grouped zeros ::
                 var zeros: [String] = []
-                for j in ipv6.count...8 {
+                for _ in ipv6.count...8 {
                     zeros.append("0000")
                 }
                 fullIPv6[i] = zeros.joined(separator: ":")

@@ -7,22 +7,16 @@
 
 import Foundation
 
-class PlatformUtil: NSObject, FlutterPlugin {
+public class PlatformUtil: ChannelDelegate {
+    static let METHOD_CHANNEL_NAME = "com.pichillilorenzo/flutter_inappwebview_platformutil"
     static var registrar: FlutterPluginRegistrar?
-    static var channel: FlutterMethodChannel?
-    
-    static func register(with registrar: FlutterPluginRegistrar) {
-        
-    }
     
     init(registrar: FlutterPluginRegistrar) {
-        super.init()
+        super.init(channel: FlutterMethodChannel(name: PlatformUtil.METHOD_CHANNEL_NAME, binaryMessenger: registrar.messenger()))
         InAppWebViewStatic.registrar = registrar
-        InAppWebViewStatic.channel = FlutterMethodChannel(name: "com.pichillilorenzo/flutter_inappwebview_platformutil", binaryMessenger: registrar.messenger())
-        registrar.addMethodCallDelegate(self, channel: InAppWebViewStatic.channel!)
     }
     
-    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    public override func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? NSDictionary
         
         switch call.method {
@@ -59,5 +53,14 @@ class PlatformUtil: NSObject, FlutterPlugin {
         formatter.dateFormat = format
         formatter.timeZone = timezone
         return formatter.string(from: PlatformUtil.getDateFromMilliseconds(date: date))
+    }
+    
+    public override func dispose() {
+        super.dispose()
+        PlatformUtil.registrar = nil
+    }
+    
+    deinit {
+        dispose()
     }
 }
